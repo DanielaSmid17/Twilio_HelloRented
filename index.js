@@ -1,4 +1,5 @@
 const cors = require('cors')
+const urlencoded = require('body-parser').urlencoded;
 
 const express = require('express')
 const app = express()
@@ -8,6 +9,8 @@ const callOut = require("./routes/call-out")
 
 require('dotenv').config();
 
+app.use(express.json())
+app.use(urlencoded({ extended: false }));
 app.use(cors())
 app.use('/voice/call-in', callIn)
 app.use('/voice/call-out', callOut)
@@ -18,9 +21,9 @@ const server = app.listen(port, () => {
 })
 const io = require('socket.io')(server)
 io.on('connection', function(client){
-    console.log('client connected on host:', client.handshake.headers.host);
+    // console.log('client connected on host:', client.handshake.headers.host);
 })
-// app.set("io", io)
+app.set("io", io)
 
 
 // exports.server = server
