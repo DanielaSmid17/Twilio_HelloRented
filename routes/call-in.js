@@ -39,9 +39,13 @@ module.exports = function(app){
     })
 
   router.post('/routeCall', (req, res) => {
+      const io = app.get('io')
       const twiml = new voiceResponse();
       twiml.dial().client('joey');
       res.type('text/xml')
+      io.on('end', function (){
+        io.disconnect(0);
+    });
       res.send(twiml.toString())
     })
   
@@ -55,7 +59,33 @@ module.exports = function(app){
           console.log("error", err);
           console.log('call', call);
           })
-        })
+  })
+  router.post('/hangup', (req, res) =>{
+    const twiml = new voiceResponse();
+    twiml.hangup();
+    res.send(twiml.toString());
+  })
+
+  router.post('/rejectCall', (req, res) => {
+    console.log('id', req.body.id);
+    client.calls(req.body.id)
+        .update({
+          url: 'https://398e680f80df.ngrok.io/voice/call-in/routeRejectCall',
+          method: 'POST',
+        }, function(err, call){
+          console.log("error", err);
+          console.log('call', call);
+          })
+  })
+     
+        
+
+    router.post('/routeRejectCall', (req, res) =>{
+      console.log('entramos')
+      const twiml = new voiceResponse();
+      twiml.say({ voice: 'alice' }, 'Sorry, it seems we cannot take your call right now. Please try to reach us out later.');
+      res.send(twiml.toString());
+    })
         
     ;
     
