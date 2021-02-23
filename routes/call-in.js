@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router();
-const voiceResponse = require('twilio').twiml.VoiceResponse
 const ClientCapability = require('twilio').jwt.ClientCapability;
 
 require('dotenv').config();
@@ -8,6 +7,7 @@ require('dotenv').config();
 
 // module.exports = router;
 module.exports = function(app){
+  const voiceResponse = require('twilio').twiml.VoiceResponse
   const accountSid = process.env.TWILIO_ACCOUNT_SID
   const authToken = process.env.TWILIO_AUTH_TOKEN
   const client = require('twilio')(accountSid, authToken)
@@ -39,7 +39,7 @@ module.exports = function(app){
     })
 
   router.post('/routeCall', (req, res) => {
-      const twiml = new VoiceResponse();
+      const twiml = new voiceResponse();
       twiml.dial().client('joey');
       res.type('text/xml')
       res.send(twiml.toString())
