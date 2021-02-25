@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 
 const callIn = require("./routes/call-in")(app)
-const callOut = require("./routes/call-out")
+const callOut = require("./routes/call-out")(app)
 
 require('dotenv').config();
 

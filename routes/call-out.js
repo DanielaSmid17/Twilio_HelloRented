@@ -1,24 +1,42 @@
 const express = require('express')
 const router = express.Router();
+require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
-require('dotenv').config();
 const client = require('twilio')(accountSid, authToken)
+const twilio = require('twilio');
+const ClientCapability = twilio.jwt.ClientCapability;
+const VoiceResponse = require('twilio').twiml.VoiceResponse
+const {urlencoded} = require('body-parser');
 
+module.exports = function(app){
+app.use(express.json())
 
-//Outbound 
 router.post('/', (req, res) => {
-    client.calls.create({
-        url: 'https://b40487ed4c05.ngrok.io/voice/call-in',
-        to: process.env.MY_PHONE_NUMBER,
-        from: process.env.TWILIO_PHONE_NUMBER
-    }, function(err, call){
-        if(err) {
-            console.log(err);
-        } else {
-            console.log(call.sid);
-        }
-    })
+
+    let voiceResponse = new VoiceResponse();
+    voiceResponse.dial({
+      callerId: process.env.TWILIO_PHONE_NUMBER,
+    }, req.body.number);
+    res.type('text/xml');
+    res.send(voiceResponse.toString());
 })
 
-module.exports = router;
+
+router.get('/token', (req, res) => {
+    const appSid = process.env.TWILIO_APP_SID  
+    const capability = new ClientCapability({
+      accountSid: accountSid,
+      authToken: authToken,
+    });
+    capability.addScope(
+      new ClientCapability.OutgoingClientScope({ applicationSid: appSid })
+    );
+    const token = capability.toJwt();
+  
+    res.set('Content-Type', 'application/jwt');
+    res.send(token);
+  });
+
+  return router;
+} 

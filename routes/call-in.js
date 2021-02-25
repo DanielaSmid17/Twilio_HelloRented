@@ -17,7 +17,7 @@ module.exports = function(app){
   
   router.post('/', (req, res) => {
     const io = app.get('io')
-    console.log(req.body.From);
+    console.log(req.body);
     console.log('call in')
     io.emit('callComing', {data: req.body})
     const twiml = new voiceResponse();
@@ -39,13 +39,9 @@ module.exports = function(app){
     })
 
   router.post('/routeCall', (req, res) => {
-      const io = app.get('io')
       const twiml = new voiceResponse();
       twiml.dial().client('joey');
       res.type('text/xml')
-      io.on('end', function (){
-        io.disconnect(0);
-    });
       res.send(twiml.toString())
     })
   
@@ -60,6 +56,7 @@ module.exports = function(app){
           console.log('call', call);
           })
   })
+
   router.post('/hangup', (req, res) =>{
     const twiml = new voiceResponse();
     twiml.hangup();
@@ -86,7 +83,6 @@ module.exports = function(app){
       twiml.say({ voice: 'alice' }, 'Sorry, it seems we cannot take your call right now. Please try to reach us out later.');
       res.send(twiml.toString());
     })
-        
     ;
     
 
