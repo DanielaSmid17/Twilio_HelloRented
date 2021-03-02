@@ -17,8 +17,6 @@ module.exports = function(app){
   
   router.post('/', (req, res) => {
     const io = app.get('io')
-    console.log(req.body);
-    console.log('call in')
     io.emit('callComing', {data: req.body})
     const twiml = new voiceResponse();
     twiml.say({ voice: 'man', loop:100 }, 'Hello from your pals at Hello Rented. Thank you for calling')
@@ -46,11 +44,14 @@ module.exports = function(app){
     })
   
   router.post('/answerCall', (req, res) => {
-    console.log('id', req.body.id);
+
     client.calls(req.body.id)
         .update({
           url: 'https://398e680f80df.ngrok.io/voice/call-in/routeCall',
           method: 'POST',
+          statusCallback: 'https://398e680f80df.ngrok.io/voice/events',
+          statusCallbackEvent: ['completed'],
+          statusCallbackMethod: 'POST'
         }, function(err, call){
           console.log("error", err);
           console.log('call', call);
@@ -64,11 +65,10 @@ module.exports = function(app){
   })
 
   router.post('/rejectCall', (req, res) => {
-    console.log('id', req.body.id);
     client.calls(req.body.id)
         .update({
           url: 'https://398e680f80df.ngrok.io/voice/call-in/routeRejectCall',
-          method: 'POST',
+          method: 'POST'
         }, function(err, call){
           console.log("error", err);
           console.log('call', call);
@@ -78,7 +78,6 @@ module.exports = function(app){
         
 
     router.post('/routeRejectCall', (req, res) =>{
-      console.log('entramos')
       const twiml = new voiceResponse();
       twiml.say({ voice: 'alice' }, 'Sorry, it seems we cannot take your call right now. Please try to reach us out later.');
       res.send(twiml.toString());

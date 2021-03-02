@@ -17,6 +17,9 @@ router.post('/', (req, res) => {
     let voiceResponse = new VoiceResponse();
     voiceResponse.dial({
       callerId: process.env.TWILIO_PHONE_NUMBER,
+      statusCallback: 'https://398e680f80df.ngrok.io/voice/events',
+      statusCallbackEvent: ['completed'],
+      statusCallbackMethod: 'POST'
     }, req.body.number);
     res.type('text/xml');
     res.send(voiceResponse.toString());
