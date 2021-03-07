@@ -23,7 +23,6 @@ const server = app.listen(port, () => {
 })
 const io = require('socket.io')(server)
 io.on('connection', function(client){
-
     // console.log('client connected on host:', client.handshake);
     // console.log('client connected on host:', client.handshake.headers.host);
 })

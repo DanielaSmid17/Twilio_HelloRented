@@ -3,11 +3,10 @@ const router = express.Router();
 require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
-const client = require('twilio')(accountSid, authToken)
+const baseurl = process.env.BASE_URL
 const twilio = require('twilio');
 const ClientCapability = twilio.jwt.ClientCapability;
 const VoiceResponse = require('twilio').twiml.VoiceResponse
-const {urlencoded} = require('body-parser');
 
 module.exports = function(app){
 app.use(express.json())
@@ -17,11 +16,12 @@ router.post('/', (req, res) => {
     let voiceResponse = new VoiceResponse();
     voiceResponse.dial({
       callerId: process.env.TWILIO_PHONE_NUMBER,
-      statusCallback: 'https://398e680f80df.ngrok.io/voice/events',
-      statusCallbackEvent: ['completed'],
+      timeout: 20,
+      statusCallback: `${baseurl}/events`,
+      statusCallbackEvent: ['completed', 'cancelled'],
       statusCallbackMethod: 'POST'
     }, req.body.number);
-    res.type('text/xml');
+    res.type('text/xml');``
     res.send(voiceResponse.toString());
 })
 
