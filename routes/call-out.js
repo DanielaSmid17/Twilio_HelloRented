@@ -1,45 +1,35 @@
 const express = require('express')
 const router = express.Router();
 require('dotenv').config();
-const accountSid = process.env.TWILIO_ACCOUNT_SID
-const authToken = process.env.TWILIO_AUTH_TOKEN
 const baseurl = process.env.BASE_URL
-const twilio = require('twilio');
-const ClientCapability = twilio.jwt.ClientCapability;
-const VoiceResponse = require('twilio').twiml.VoiceResponse
+const voiceResponse = require('twilio').twiml.VoiceResponse
+const {createTokenOutgoing} = require('../utils/token')
 
 module.exports = function(app){
-app.use(express.json())
 
+// Placing call once twilio device is setup
 router.post('/', (req, res) => {
-
-    let voiceResponse = new VoiceResponse();
-    voiceResponse.dial({
+    const io = app.get('io')
+    io.emit('callAnswered', {data: req.body.CallSid})
+    let twiml = new voiceResponse();
+    twiml.dial({
       callerId: process.env.TWILIO_PHONE_NUMBER,
       timeout: 20,
       statusCallback: `${baseurl}/events`,
       statusCallbackEvent: ['completed', 'cancelled'],
       statusCallbackMethod: 'POST'
     }, req.body.number);
-    res.type('text/xml');``
-    res.send(voiceResponse.toString());
+    res.type('text/xml');
+    res.send(twiml.toString());
 })
 
+// creting token for setting up Twilio device
 
 router.get('/token', (req, res) => {
-    const appSid = process.env.TWILIO_APP_SID  
-    const capability = new ClientCapability({
-      accountSid: accountSid,
-      authToken: authToken,
-    });
-    capability.addScope(
-      new ClientCapability.OutgoingClientScope({ applicationSid: appSid })
-    );
-    const token = capability.toJwt();
-  
+    const token = createTokenOutgoing("outbound")
     res.set('Content-Type', 'application/jwt');
     res.send(token);
   });
 
   return router;
-} 
+}

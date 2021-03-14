@@ -9,41 +9,32 @@ const client = require('twilio')(accountSid, authToken)
 const voiceResponse = require('twilio').twiml.VoiceResponse
 
 module.exports = function(app){
+
 router.post('/', (req, res) =>{
-    console.log(req.body);
-    console.log('call ended');
     const date = new Date()
-    console.log(`entramos aca ${date}`);
+    console.log(`call ended ${date}`, req.body);
     const io = app.get('io')
     io.emit('callEnding', {data: req.body, date})
 })
 
 router.post('/callNotAnswered', (req, res) =>{
-    console.log('call not answered');
-    const twiml = new voiceResponse();
-    twiml.say({ voice: 'alice'}, 'Sorry, it seems we cannot take your call right now')
-    // var stack = new Error()
-    console.trace(stack)
-    res.type('text/xml');
-    res.send(twiml.toString())
-
-    // client.calls(req.body.id)
-    //     .update({
-    //       url: `${baseurl}/events/routeCall`,
-    //     }, function(err, call){
-    //       console.log("error", err);
-    //       console.log('call', call);
-    //       })
+    const date = new Date()
+    console.log(`call not answered ${date}`, req.body );
+    client.calls(req.body.id)
+    .update({
+        url: `${baseurl}/events/routeUnansweredCall`,
+    }, function(err, call){
+        console.log("error", err);
+        console.log('call', call);
+    })
  
 })
-
-router.post('/routeCall', (req,res) => {
-    const date = new Date()
-    console.log(`entre call not answered ${date}`);
-    // const twiml = new voiceResponse();
-    // twiml.say({ voice: 'alice'}, 'Sorry, it seems we cannot take your call right now')
-    // res.type('text/xml');
-    // res.send(twiml.toString())
+router.post('/routeUnansweredCall', (req, res) => {
+    console.log('entro a route unanswered Call');
+    const twiml = new voiceResponse()
+    twiml.say({ voice: 'alice'}, 'Sorry, it seems we cannot take your call right now')
+    res.type('text/xml');
+    res.send(twiml.toString()) 
 })
 
 return router
