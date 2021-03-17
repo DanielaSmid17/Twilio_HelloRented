@@ -24,7 +24,7 @@ app.use('/voice/events', events)
 app.use('/voice/recordings', recordings)
 
 const port = process.env.PORT;
-const server = app.listen(port, () => {
+const server = app.listen(port || 5000, () => {
     console.log(`Listening on port ${port}`);
 })
 const io = require('socket.io')(server)
