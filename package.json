@@ -1,6 +1,5 @@
 {"engines": {
-  "node": "^6.9",
-  "yarn": "^0.21"},
+  "yarn": "^1.22.5"},
   "dependencies": {
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
