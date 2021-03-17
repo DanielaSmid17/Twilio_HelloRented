@@ -21,5 +21,8 @@
   "license": "MIT",
   "engines": {
     "yarn": "1.x"
-  }
+  },
+    "scripts": {
+    "start": "yarn start"
+}
 }
