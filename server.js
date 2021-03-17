@@ -17,7 +17,7 @@ const events = require("./routes/events")(app)
 app.use(express.json())
 app.use(urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({origin: 'http://localhost:3000'}))
+app.use(cors())
 app.use('/voice/call-in', callIn)
 app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
