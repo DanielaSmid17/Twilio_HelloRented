@@ -16,11 +16,11 @@
   },
   "name": "twilio-hellorented",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/DanielaSmid17/Twilio_HelloRented.git",
   "author": "DanielaSmid17 <dani.smid@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   }
 }
