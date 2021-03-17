@@ -10,19 +10,12 @@
     "ngrok": "^3.4.0",
     "nodemon": "^2.0.7",
     "socket.io": "^3.1.1",
-    "twilio": "^3.58.0",
-    "ws": "^7.4.3"
+    "twilio": "^3.58.0"
   },
   "name": "twilio-hellorented",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/DanielaSmid17/Twilio_HelloRented.git",
   "author": "DanielaSmid17 <dani.smid@gmail.com>",
-  "license": "MIT",
-  "engines": {
-    "yarn": "1.x"
-  },
-  "scripts": {
-    "start": "yarn start"
-  }
+  "license": "MIT"
 }
