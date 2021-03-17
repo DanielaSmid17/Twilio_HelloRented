@@ -28,9 +28,6 @@ const server = app.listen(port, function () {
     console.log(`Express server listening on ${port}`, port, app.get('env'));
   });
 
-const server = app.listen(port || 5000, () => {
-    console.log(`Listening on port ${port}`);
-})
 const io = require('socket.io')(server)
 io.on('connection', function(client){
 })
