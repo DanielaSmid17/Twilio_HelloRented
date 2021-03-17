@@ -3,16 +3,17 @@ const router = express.Router();
 require('dotenv').config();
 const baseurl = process.env.BASE_URL
 const voiceResponse = require('twilio').twiml.VoiceResponse
-const {createTokenOutgoing} = require('../utils/token')
+const {createToken} = require('../utils/token')
 
 module.exports = function(app){
 
 // Placing call once twilio device is setup
 router.post('/', (req, res) => {
     const io = app.get('io')
-    io.emit('callAnswered', {data: req.body.CallSid})
+    io.emit('outgoingCall', {data: req.body.CallSid})
     let twiml = new voiceResponse();
     twiml.dial({
+      record: true,
       callerId: process.env.TWILIO_PHONE_NUMBER,
       timeout: 20,
       statusCallback: `${baseurl}/events`,
@@ -26,7 +27,7 @@ router.post('/', (req, res) => {
 // creting token for setting up Twilio device
 
 router.get('/token', (req, res) => {
-    const token = createTokenOutgoing("outbound")
+    const token = createToken("outbound")
     res.set('Content-Type', 'application/jwt');
     res.send(token);
   });
