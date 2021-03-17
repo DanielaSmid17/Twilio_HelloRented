@@ -1,4 +1,5 @@
 {"engines": {
+  "node": "^6.9",
   "yarn": "^0.21"},
   "dependencies": {
     "axios": "^0.21.1",
