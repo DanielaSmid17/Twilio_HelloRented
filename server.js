@@ -13,6 +13,7 @@ const events = require("./routes/events")(app)
 
 
 // middlewares
+app.use(express.static(__dirname))
 app.use(express.json())
 app.use(urlencoded({ extended: false }));
 app.use(cors())
@@ -21,15 +22,16 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
 const port = process.env.PORT;
-app.listen(port, function () {
+const server = app.listen(port, function () {
     console.log(`Express server listening on ${port}`, port, app.get('env'));
   });
 
-
-const http = require('http').Server(app);
-// const io = requigre('socket.io')(http);
-const io = require('socket.io')(http, {path:"https://hr-twilio-fe.herokuapp.com/"})
+const io = require('socket.io')(server)
 io.on('connection', function(client){
+  console.log('socket connected');
 })
+io.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 app.set("io", io)
 
