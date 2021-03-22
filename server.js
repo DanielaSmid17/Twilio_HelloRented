@@ -7,7 +7,7 @@ require('dotenv').config();
 
 //require routes
 // {origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}
-app.use(cors())
+app.use(cors({origin: 'https://hr-twilio-fe.herokuapp.com'}))
 // app.use(function (req, res, next) {
 //   // Website you wish to allow to connect
 //   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -41,16 +41,16 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
 const port = process.env.PORT;
-// const server = app.listen(port, function () {
-//     console.log(`Express server listening on ${port}`, port, app.get('env'));
-//   });
+const server = app.listen(port, function () {
+    console.log(`Express server listening on ${port}`, port, app.get('env'));
+  });
 
-  const requestListener = function (req, res) {
-    res.writeHead(200);
-    res.end('Hello, World!');
-  }
-  const server = http.createServer(requestListener);
-  server.listen(port);
+  // const requestListener = function (req, res) {
+  //   res.writeHead(200);
+  //   res.end('Hello, World!');
+  // }
+  // const server = http.createServer(requestListener);
+  // server.listen(port);
 
 const io = require('socket.io')(server,{cors:
   {origin: "https://hr-twilio-fe.herokuapp.com",
