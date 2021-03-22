@@ -2,6 +2,7 @@ const cors = require('cors')
 const urlencoded = require('body-parser').urlencoded;
 const express = require('express')
 const app = express()
+const http = require('http');
 require('dotenv').config();
 
 //require routes
@@ -40,16 +41,25 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
 const port = process.env.PORT;
-const server = app.listen(port, function () {
-    console.log(`Express server listening on ${port}`, port, app.get('env'));
-  });
+// const server = app.listen(port, function () {
+//     console.log(`Express server listening on ${port}`, port, app.get('env'));
+//   });
 
-const io = require('socket.io')(server,{cors:{origin:'*'}})
+  const requestListener = function (req, res) {
+    res.writeHead(200);
+    res.end('Hello, World!');
+  }
+  const server = http.createServer(requestListener);
+  server.listen(port);
+
+const io = require('socket.io')(server,{cors:
+  {origin: "https://hr-twilio-fe.herokuapp.com",
+  methods: ["GET", "POST"],}})
 io.on('connection', function(client){
   console.log('socket connected');
 })
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
-app.set("io", io) 
+app.set("io", io)
 
