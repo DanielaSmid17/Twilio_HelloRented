@@ -13,10 +13,10 @@ const events = require("./routes/events")(app)
 
 
 // middlewares
+app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com/']}))
 app.use(express.static(__dirname))
 app.use(express.json())
 app.use(urlencoded({ extended: false }));
-app.use(cors())
 app.use('/voice/call-in', callIn)
 app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
