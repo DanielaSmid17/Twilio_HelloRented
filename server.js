@@ -3,6 +3,7 @@ const urlencoded = require('body-parser').urlencoded;
 const express = require('express')
 const app = express()
 require('dotenv').config();
+const http = require('http');
 
 //require routes
 // {origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}
@@ -39,12 +40,10 @@ app.use('/voice/call-in', callIn)
 app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
-const port = process.env.PORT;
+const port = process.env.PORT
 const server = app.listen(port, function () {
-    console.log(`Express server listening on ${port}`, port, app.get('env'));
+    console.log(`Express server listening on ${port}`, app.get('env'));
   });
-
-
 const io = require('socket.io')(server)
 io.on('connection', function(client){
   console.log('socket connected');

@@ -26,9 +26,8 @@ module.exports = function(app){
 
   callInBrowser = (data, twiml) => {
     const io = app.get('io')
-    console.log('calling', data);
     io.emit('callComing', {data})
-    console.log(io.status);
+    console.log(io);
     twiml.say({ voice: 'man', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
