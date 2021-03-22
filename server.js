@@ -1,6 +1,5 @@
 const cors = require('cors')
 const urlencoded = require('body-parser').urlencoded;
-var bodyParser = require('body-parser');
 const express = require('express')
 const app = express()
 require('dotenv').config();
@@ -22,11 +21,14 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
 const port = process.env.PORT;
-const server = app.listen(port, function () {
+app.listen(port, function () {
     console.log(`Express server listening on ${port}`, port, app.get('env'));
   });
 
-const io = require('socket.io')("https://hr-twilio-fe.herokuapp.com/")
+
+const http = require('http').Server(app);
+// const io = requigre('socket.io')(http);
+const io = require('socket.io')(http, {path:"https://hr-twilio-fe.herokuapp.com/"})
 io.on('connection', function(client){
 })
 app.set("io", io)
