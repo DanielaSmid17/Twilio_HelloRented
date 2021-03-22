@@ -5,7 +5,7 @@ const app = express()
 require('dotenv').config();
 
 //require routes
-app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com/']}))
+app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}))
 
 const callIn = require("./routes/call-in")(app)
 const callOut = require("./routes/call-out")(app)
