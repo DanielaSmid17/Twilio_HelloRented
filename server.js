@@ -7,10 +7,10 @@ require('dotenv').config();
 
 //require routes
 // {origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}
-app.use(cors({origin: 'https://hr-twilio-fe.herokuapp.com'}))
-// app.use(function (req, res, next) {
+app.use(cors({origin: ['https://hr-twilio-fe.herokuapp.com', 'https://www.hellorented.com:8443']}))
+app.use(function (req, res, next) {
 //   // Website you wish to allow to connect
-//   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
 //   // Request methods you wish to allow
 //   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -24,7 +24,7 @@ app.use(cors({origin: 'https://hr-twilio-fe.herokuapp.com'}))
 
 //   // Pass to next layer of middleware
 //   next();
-// });
+});
 
 const callIn = require("./routes/call-in")(app)
 const callOut = require("./routes/call-out")(app)
