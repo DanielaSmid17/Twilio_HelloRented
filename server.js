@@ -2,28 +2,27 @@ const cors = require('cors')
 const urlencoded = require('body-parser').urlencoded;
 const express = require('express')
 const app = express()
-const http = require('http');
 require('dotenv').config();
 
 //require routes
 // {origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}
-app.use(cors({origin: ['https://hr-twilio-fe.herokuapp.com', 'https://www.hellorented.com:8443']}))
+app.use(cors())
 app.use(function (req, res, next) {
 //   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
 
 //   // Request methods you wish to allow
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
 //   // Request headers you wish to allow
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
 //   // Set to true if you need the website to include cookies in the requests sent
 //   // to the API (e.g. in case you use sessions)
-//   res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
 //   // Pass to next layer of middleware
-//   next();
+  next();
 });
 
 const callIn = require("./routes/call-in")(app)
@@ -45,16 +44,8 @@ const server = app.listen(port, function () {
     console.log(`Express server listening on ${port}`, port, app.get('env'));
   });
 
-  // const requestListener = function (req, res) {
-  //   res.writeHead(200);
-  //   res.end('Hello, World!');
-  // }
-  // const server = http.createServer(requestListener);
-  // server.listen(port);
 
-const io = require('socket.io')(server,{cors:
-  {origin: "https://hr-twilio-fe.herokuapp.com",
-  methods: ["GET", "POST"],}})
+const io = require('socket.io')(server)
 io.on('connection', function(client){
   console.log('socket connected');
 })
