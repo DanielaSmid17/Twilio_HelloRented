@@ -5,6 +5,7 @@ const app = express()
 require('dotenv').config();
 
 //require routes
+app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com/']}))
 
 const callIn = require("./routes/call-in")(app)
 const callOut = require("./routes/call-out")(app)
@@ -13,7 +14,6 @@ const events = require("./routes/events")(app)
 
 
 // middlewares
-app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com/']}))
 app.use(express.static(__dirname))
 app.use(express.json())
 app.use(urlencoded({ extended: false }));
