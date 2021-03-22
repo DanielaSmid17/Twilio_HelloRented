@@ -13,7 +13,6 @@ const client = require('twilio')(accountSid, authToken)
 module.exports = function(app){
 
   router.post('/', (req, res) => {
-    console.log(req.body);
     fs.readFile('./settings.json', 'utf8', function (err, data) {
       const twiml = new voiceResponse();
       const settings = JSON.parse(data)
@@ -29,6 +28,7 @@ module.exports = function(app){
     const io = app.get('io')
     console.log('calling', data);
     io.emit('callComing', {data})
+    console.log(io.status);
     twiml.say({ voice: 'man', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
