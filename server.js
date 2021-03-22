@@ -7,9 +7,8 @@ require('dotenv').config();
 //require routes
 app.use(cors({origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}))
 app.use(function (req, res, next) {
-
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'https://hr-twilio-fe.herokuapp.com');
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   // Request methods you wish to allow
   // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
