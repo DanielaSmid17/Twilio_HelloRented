@@ -3,28 +3,32 @@ const urlencoded = require('body-parser').urlencoded;
 const express = require('express')
 const app = express()
 require('dotenv').config();
-const http = require('http');
 
 //require routes
 // {origin:['http://localhost:8000', 'https://hr-twilio-fe.herokuapp.com']}
-app.use(cors())
-app.use(function (req, res, next) {
-//   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', '*');
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+// app.use(function (req, res, next) {
+// //   // Website you wish to allow to connect
+//   res.setHeader('Access-Control-Allow-Origin', '*');
 
-//   // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+// //   // Request methods you wish to allow
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-//   // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+// //   // Request headers you wish to allow
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-  res.setHeader('Access-Control-Allow-Credentials', true);
+// //   // Set to true if you need the website to include cookies in the requests sent
+// //   // to the API (e.g. in case you use sessions)
+//   res.setHeader('Access-Control-Allow-Credentials', true);
 
-//   // Pass to next layer of middleware
-  next();
-});
+// //   // Pass to next layer of middleware
+//   next();
+// });
 
 const callIn = require("./routes/call-in")(app)
 const callOut = require("./routes/call-out")(app)
@@ -41,10 +45,21 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
 const port = process.env.PORT
-const server = app.listen(port, function () {
-    console.log(`Express server listening on ${port}`, app.get('env'));
-  });
-const io = require('socket.io')(server)
+// const server = app.listen(port, function () {
+//     console.log(`Express server listening on ${port}`, app.get('env'));
+//   });
+const server = require('http').Server(app)
+server.listen(port, 
+  console.log(`Connected to port ${port}`))
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "https://hr-twilio-fe.herokuapp.com",
+    methods: ["GET", "POST"]
+  }
+
+})
+  // const io = require('socket.io')(server)
 io.on('connection', function(client){
   console.log('socket connected');
 })

@@ -13,11 +13,12 @@ const client = require('twilio')(accountSid, authToken)
 module.exports = function(app){
 
   router.post('/', (req, res) => {
+    console.log('incoming call');
     fs.readFile('./settings.json', 'utf8', function (err, data) {
       const twiml = new voiceResponse();
       const settings = JSON.parse(data)
       if (settings.available) callInBrowser(req.body, twiml)
-      else transferCall(settings.redirectNumber, twiml)
+      else transferCall(twiml)
       res.type('text/xml');
       res.send(twiml.toString()) 
     })
@@ -27,14 +28,13 @@ module.exports = function(app){
   callInBrowser = (data, twiml) => {
     const io = app.get('io')
     io.emit('callComing', {data})
-    console.log(io);
     twiml.say({ voice: 'man', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
   // server off: forwarding calls to a given number
-  transferCall = (number, twiml) => {
-      twiml.say({ voice: 'man'}, 'Hello from your pals at Hello Rented. We are re-directing you to one of our agents. Thank you for calling')
-      twiml.dial(number)
+  transferCall = (twiml) => {
+      twiml.say({ voice: 'man'}, 'Thank you for contacting Hello Rented! We are unable to take your call at this time. Please send us an email at customersuccess@hellorented.com and one of our customer success representatives will get back to you as soon as possible. Goodbye')
+      twiml.hangup()
       // twiml.record({ transcribe: true })
 
 }
