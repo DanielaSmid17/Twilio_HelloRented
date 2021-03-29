@@ -28,12 +28,12 @@ module.exports = function(app){
   callInBrowser = (data, twiml) => {
     const io = app.get('io')
     io.emit('callComing', {data})
-    twiml.say({ voice: 'man', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
+    twiml.say({ voice: 'alice', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
   // server off: forwarding calls to a given number
   transferCall = (twiml) => {
-      twiml.say({ voice: 'man'}, 'Thank you for contacting Hello Rented! We are unable to take your call at this time. Please send us an email at customersuccess@hellorented.com and one of our customer success representatives will get back to you as soon as possible. Goodbye')
+      twiml.say({ voice: 'aiice'}, 'Thank you for contacting Hello Rented! We are unable to take your call at this time. Please send us an email at customersuccess@hellorented.com and one of our customer success representatives will get back to you as soon as possible. Goodbye')
       twiml.hangup()
       // twiml.record({ transcribe: true })
 

@@ -15,6 +15,7 @@ const createToken = (callType) => {
             new ClientCapability.OutgoingClientScope({ applicationSid: appSid })
             );
             const token = capability.toJwt();
+            console.log(token);
             return token
         }
     else {

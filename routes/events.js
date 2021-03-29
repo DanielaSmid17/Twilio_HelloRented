@@ -13,6 +13,7 @@ module.exports = function(app){
 //call ended in the phone
 router.post('/', (req, res) =>{
     const date = new Date()
+    console.log(date, req.body);
     const io = app.get('io')
     io.emit('callEnding', {data: req.body, date})
 })

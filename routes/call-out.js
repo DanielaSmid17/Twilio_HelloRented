@@ -9,7 +9,7 @@ module.exports = function(app){
 
 // Placing call once twilio device is setup
 router.post('/', (req, res) => {
-    console.log('entro aca');
+    console.log('entro aca', req.body);
     const io = app.get('io')
     io.emit('outgoingCall', {data: req.body.CallSid})
     let twiml = new voiceResponse();
@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
       callerId: process.env.TWILIO_PHONE_NUMBER,
       timeout: 20,
       statusCallback: `${baseurl}/events`,
-      statusCallbackEvent: ['completed', 'cancelled'],
+      statusCallbackEvent: ['answered', 'completed'],
       statusCallbackMethod: 'POST'
     }, req.body.number);
     res.type('text/xml');
