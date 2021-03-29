@@ -3,6 +3,7 @@ const urlencoded = require('body-parser').urlencoded;
 const express = require('express')
 const app = express()
 require('dotenv').config();
+const http = require('http')
 
 app.use(cors());
 // app.use((req, res, next) => {
@@ -23,17 +24,18 @@ app.use('/voice/call-in', callIn)
 app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 
-const port = process.env.PORT
-const server = app.listen(port, function () {
-    console.log(`Express server listening on ${port}`, app.get('env'));
-  });
+const port = process.env.PORT || 8000
+const server = http.createServer(app)
 
 const io = require('socket.io')(server)
-io.on('connection', function(client){
-  console.log('socket connected');
+io.on('connection', (socket)=>{
+  socket.emit('clientConnection', null)
+  console.log('Client Connected');
 })
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
+
+server.listen(port, () => console.log(`Listening on port ${port}`));
 app.set("io", io)
 
