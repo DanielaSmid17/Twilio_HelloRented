@@ -5,7 +5,8 @@ const app = express()
 require('dotenv').config();
 
 app.use(cors());
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://hr-twilio-fe.herokuapp.com")})
 
 //require routes
 const callIn = require("./routes/call-in")(app)
