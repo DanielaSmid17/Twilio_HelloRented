@@ -7,8 +7,7 @@ const http = require('http')
 const server = http.createServer(app)
 
 app.use(cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")})
+
 
 //require routes
 const callIn = require("./routes/call-in")(app)
@@ -29,7 +28,13 @@ app.use((req, res) => res.sendFile('/index.html', { root: __dirname }))
 
 const port = process.env.PORT || 8000
 
-const io = require('socket.io')(server)
+// const io = require('socket.io')(server)
+const io = require("socket.io")(server, {
+  cors: {
+    methods: ["GET", "POST"],
+    credentials: false
+  }
+});
 io.on('connection', (socket)=>{
   socket.emit('clientConnection', null)
   console.log('Client Connected');
