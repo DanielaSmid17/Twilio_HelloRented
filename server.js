@@ -4,10 +4,11 @@ const express = require('express')
 const app = express()
 require('dotenv').config();
 const http = require('http')
+const server = http.createServer(app)
 
 app.use(cors());
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:3000")})
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*")})
 
 //require routes
 const callIn = require("./routes/call-in")(app)
@@ -27,7 +28,6 @@ app.use((req, res) => res.sendFile('/index.html', { root: __dirname }))
  
 
 const port = process.env.PORT || 8000
-const server = http.createServer(app)
 
 const io = require('socket.io')(server)
 io.on('connection', (socket)=>{
