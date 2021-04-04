@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
       callerId: process.env.TWILIO_PHONE_NUMBER,
       timeout: 20,
       statusCallback: `${baseurl}/events`,
-      statusCallbackEvent: ['answered', 'completed'],
+      statusCallbackEvent: [{'status':'answered'}, {'status':'completed'}],
       statusCallbackMethod: 'POST'
     }, req.body.number);
     res.type('text/xml');

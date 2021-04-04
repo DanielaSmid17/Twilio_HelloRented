@@ -11,17 +11,21 @@ const client = require('twilio')(accountSid, authToken)
 
 
 module.exports = function(app){
+  let availability = false
+
+  router.post('/availability', (req, res) => {
+    const {browserAvailability} = req.body
+    availability = browserAvailability
+    res.send(`Availability has been set to ${availability}`)
+  })
 
   router.post('/', (req, res) => {
-    console.log('incoming call');
-    fs.readFile('./settings.json', 'utf8', function (err, data) {
-      const twiml = new voiceResponse();
-      const settings = JSON.parse(data)
-      if (settings.available) callInBrowser(req.body, twiml)
+    console.log('incoming call', availability)
+    const twiml = new voiceResponse();
+    if (availability) callInBrowser(req.body, twiml)
       else transferCall(twiml)
       res.type('text/xml');
       res.send(twiml.toString()) 
-    })
   })
  
 
