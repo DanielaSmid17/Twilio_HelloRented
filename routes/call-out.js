@@ -9,9 +9,8 @@ module.exports = function(app){
 
 // Placing call once twilio device is setup
 router.post('/', (req, res) => {
-    console.log('entro aca', req.body);
     const io = app.get('io')
-    io.emit('outgoingCall', {data: req.body.CallSid})
+    io.emit('outgoingCall', {data: req.body})
     let twiml = new voiceResponse();
     twiml.dial({
       record: true,
