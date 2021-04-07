@@ -12,18 +12,19 @@ const client = require('twilio')(accountSid, authToken)
 
 module.exports = function(app){
   let availability = false
+  let message = ''
 
   router.post('/availability', (req, res) => {
-    const {browserAvailability} = req.body
+    const {browserAvailability, message} = req.body
     availability = browserAvailability
     res.send(`Availability has been set to ${availability}`)
   })
 
   router.post('/', (req, res) => {
-    console.log('incoming call', availability)
+    console.log('incoming call', availability, message)
     const twiml = new voiceResponse();
     if (availability) callInBrowser(req.body, twiml)
-      else transferCall(twiml)
+      else transferCall(twiml, message)
       res.type('text/xml');
       res.send(twiml.toString()) 
   })
@@ -36,8 +37,8 @@ module.exports = function(app){
     twiml.record({ transcribe: true, maxLength: 30 })
 }
   // server off: forwarding calls to a given number
-  transferCall = (twiml) => {
-      twiml.say({ voice: 'aiice'}, 'Thank you for contacting Hello Rented! We are unable to take your call at this time. Please send us an email at customersuccess@hellorented.com and one of our customer success representatives will get back to you as soon as possible. Goodbye')
+  transferCall = (twiml, message) => {
+      twiml.say({ voice: 'aiice'}, message)
       twiml.hangup()
       // twiml.record({ transcribe: true })
 

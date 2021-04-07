@@ -21,7 +21,7 @@ router.post('/', (req, res) =>{
 router.post('/status', (req, res) => {
     console.log('status call changed post', req.body);
     const io = app.get('io')
-    io.emit('callStatus', req.body)
+    io.emit('callStatus', {data: req.body})
 })
 
 router.post('/callNotAnswered', (req, res) =>{
