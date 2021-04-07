@@ -27,7 +27,10 @@ app.use((req, res) => res.sendFile('/index.html', { root: __dirname }))
  
 const port = process.env.PORT || 8000
 
-// const io = require('socket.io')(server)
+app.post('/', (req, res) =>{
+  console.log('hola');
+})
+
 const io = require("socket.io")(server, {
   cors: {
     methods: ["GET", "POST"],
@@ -41,6 +44,10 @@ io.on('connection', (socket)=>{
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
+
+io.on('initialization', (data) =>{
+  console.log(data);
+})
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
 app.set("io", io)

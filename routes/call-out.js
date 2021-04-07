@@ -15,7 +15,6 @@ router.post('/', (req, res) => {
     console.log('outgoing call');
     io.emit('outgoingCall', {data: req.body})
     let twiml = new voiceResponse();
-    twiml.say('your call es being connected')
     const dial = twiml.dial({callerId: twilioNumber})
     dial.number({
       statusCallbackEvent: 'initiated ringing answered completed',
