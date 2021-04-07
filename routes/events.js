@@ -23,26 +23,3 @@ router.post('/status', (req, res) => {
     const io = app.get('io')
     io.emit('callStatus', {data: req.body})
 })
-
-router.post('/callNotAnswered', (req, res) =>{
-    const date = new Date()
-    console.log(`call not answered ${date}`, req.body );
-    client.calls(req.body.id)
-    .update({
-        url: `${baseurl}/events/routeUnansweredCall`,
-    }, function(err, call){
-        console.log("error", err);
-        console.log('call', call);
-    })
- 
-})
-router.post('/routeUnansweredCall', (req, res) => {
-    console.log('entro a route unanswered Call');
-    const twiml = new voiceResponse()
-    twiml.say({ voice: 'alice'}, 'Sorry, it seems we cannot take your call right now')
-    res.type('text/xml');
-    res.send(twiml.toString()) 
-})
-
-return router
-}

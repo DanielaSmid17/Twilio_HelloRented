@@ -12,11 +12,13 @@ const client = require('twilio')(accountSid, authToken)
 
 module.exports = function(app){
   let availability = false
-  let message = ''
+  let message = null
 
   router.post('/availability', (req, res) => {
-    const {browserAvailability, message} = req.body
+    console.log(req.body);
+    const {browserAvailability, messageBrowser} = req.body
     availability = browserAvailability
+    message = messageBrowser
     res.send(`Availability has been set to ${availability}`)
   })
 
