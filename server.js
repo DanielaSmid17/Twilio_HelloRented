@@ -25,7 +25,6 @@ app.use('/voice/call-out', callOut)
 app.use('/voice/events', events)
 app.use((req, res) => res.sendFile('/index.html', { root: __dirname }))
  
-
 const port = process.env.PORT || 8000
 
 // const io = require('socket.io')(server)

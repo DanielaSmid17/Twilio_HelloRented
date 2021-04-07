@@ -28,12 +28,8 @@ router.post('/', (req, res) => {
 
 // creting token for setting up Twilio device
 
-router.post('/token', (req, res) => {
-    const accountSid = req.body.accountSid
-    const authToken = req.body.authToken
-    const appSid = req.body.appSid
-    console.log(accountSid, authToken, appSid);
-    const token = createToken("outbound", accountSid, authToken, appSid)
+router.get('/token', (req, res) => {
+    const token = createToken("outbound")
     res.set('Content-Type', 'application/jwt');
     res.send(token);
   });
