@@ -23,3 +23,7 @@ router.post('/status', (req, res) => {
     const io = app.get('io')
     io.emit('callStatus', {data: req.body})
 })
+
+
+return router
+}
