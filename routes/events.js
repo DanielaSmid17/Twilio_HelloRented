@@ -13,8 +13,15 @@ module.exports = function(app){
 //call ended in the phone
 router.post('/', (req, res) =>{
     const date = new Date()
+    console.log('status call changed', date, req.body);
     const io = app.get('io')
     io.emit('callEnding', {data: req.body})
+})
+
+router.post('/status', (req, res) => {
+    console.log('status call changed post', req.body);
+    const io = app.get('io')
+    io.emit('callStatus', req.body)
 })
 
 router.post('/callNotAnswered', (req, res) =>{
