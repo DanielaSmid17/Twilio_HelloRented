@@ -27,10 +27,6 @@ app.use((req, res) => res.sendFile('/index.html', { root: __dirname }))
  
 const port = process.env.PORT || 8000
 
-app.post('/', (req, res) =>{
-  console.log('hola');
-})
-
 const io = require("socket.io")(server, {
   cors: {
     methods: ["GET", "POST"],

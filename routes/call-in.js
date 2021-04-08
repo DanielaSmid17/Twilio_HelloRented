@@ -25,6 +25,8 @@ module.exports = function(app){
   router.post('/', (req, res) => {
     console.log('incoming call', availability, message)
     const twiml = new voiceResponse();
+    const io = app.get('io')
+    io.emit('callComing', {data})
     if (availability) callInBrowser(req.body, twiml)
       else transferCall(twiml, message)
       res.type('text/xml');
@@ -33,8 +35,6 @@ module.exports = function(app){
  
 
   callInBrowser = (data, twiml) => {
-    const io = app.get('io')
-    io.emit('callComing', {data})
     twiml.say({ voice: 'alice', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
@@ -42,7 +42,6 @@ module.exports = function(app){
   transferCall = (twiml, message) => {
       twiml.say({ voice: 'aiice'}, message)
       twiml.hangup()
-      // twiml.record({ transcribe: true })
 
 }
   
