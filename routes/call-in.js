@@ -25,8 +25,6 @@ module.exports = function(app){
   router.post('/', (req, res) => {
     console.log('incoming call', availability, message)
     const twiml = new voiceResponse();
-    const io= app.get('io')
-    io.emit('callComing', {data})
     if (availability) callInBrowser(req.body, twiml)
       else transferCall(twiml, message, req.body)
       res.type('text/xml');
