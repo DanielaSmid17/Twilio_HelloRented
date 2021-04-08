@@ -25,21 +25,25 @@ module.exports = function(app){
   router.post('/', (req, res) => {
     console.log('incoming call', availability, message)
     const twiml = new voiceResponse();
-    const io = app.get('io')
+    const io= app.get('io')
     io.emit('callComing', {data})
     if (availability) callInBrowser(req.body, twiml)
-      else transferCall(twiml, message)
+      else transferCall(twiml, message, req.body)
       res.type('text/xml');
       res.send(twiml.toString()) 
   })
  
 
   callInBrowser = (data, twiml) => {
+    const io = app.get('io')
+    io.emit('callComing', {data})
     twiml.say({ voice: 'alice', loop: 4}, 'Hello from your pals at Hello Rented. Thank you for calling')
     twiml.record({ transcribe: true, maxLength: 30 })
 }
   // server off: forwarding calls to a given number
-  transferCall = (twiml, message) => {
+  transferCall = (twiml, message, data) => {
+    const io= app.get('io')
+    io.emit('callComing', {data})
       twiml.say({ voice: 'aiice'}, message)
       twiml.hangup()
 
